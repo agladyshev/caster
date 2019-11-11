@@ -19,6 +19,9 @@ var getFeed = function (req, res, next) {
         res.feed = xml;
         next();
     })
+    .catch(function (error) {
+        console.log(error);
+    })
 }
 
 var parseFeed = function (req, res, next) {
@@ -29,13 +32,19 @@ var parseFeed = function (req, res, next) {
 
 }
 
-app.use(getFeed);
+app.use('/', express.static('public'));
 
-app.use(parseFeed);
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Content-Type, X-Requested-With");
+    next();
+});
 
-app.get('/', function (req, res, next) {
-    res.send(res.feed);
-    console.log(typeof res.feed);
+app.get('/get', getFeed, parseFeed, function (req, res, next) {
+    // console.log(res.feed.rss.channel.item);
+    let channel = res.feed.rss.channel[0];
+    let items = res.feed.rss.channel[0].item;
+    res.send(channel);
 });
 
 app.listen(port, () => console.log(`Listening`)); 
