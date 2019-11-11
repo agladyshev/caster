@@ -1,0 +1,29 @@
+html {
+    box-sizing: border-box;
+  }
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+
+.podcast {
+      
+}
+
+.episode {
+    
+}
+
+@media (min-width: 650px) { 
+    .wrapper {
+        display: grid;
+        grid-gap: 2em;
+        grid-template-columns: 4fr;
+        grid-template-rows: auto;
+    }
+}
+
+@media (min-width: 1000px) { 
+    .wrapper {
+        grid-template-columns: 6fr;
+    }
+}

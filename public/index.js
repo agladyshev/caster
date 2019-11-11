@@ -6,11 +6,29 @@ fetch('http://localhost:3000/get', {
     method: 'GET',
 })
 .then(function(res) {
-    // console.log(res.json());
     return res.json();
     }, function(error) {
     console.log(error);
 })
-.then(function(json) {
-    wrapper[0].innerHTML = `<h1>${json.title}</h1>`;
+.then(function(podcast) {
+    // let {title, author, summary} = podcast;
+    wrapper[0].innerHTML = `
+            <section class="podcast">
+            <h2>${podcast.title}</h2>
+            <h6>${podcast["itunes:author"]}</h6>
+            <details class="podcast-description">
+                <summary>About</summary>
+                ${podcast["itunes:summary"]}
+            </details>
+            <details class="episodes">
+                <summary>Episodes</summary>
+            </details>
+        </section>
+    `;
+    let episodesHTML = wrapper[0].querySelector(".episodes");
+    let episodes = podcast.item;
+    episodes.forEach(episode => {
+        console.log(episode.title);
+        episodesHTML.innerHTML += `<h3>${episode.title[0]}</h3>`
+    });
 })
