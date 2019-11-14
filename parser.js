@@ -47,7 +47,7 @@ var getFeed = function (req, res, next) {
         });
     })
     .then(function() {
-        console.log(podcasts);
+        // console.log(podcasts);
         res.podcasts = podcasts;
         next();
     })

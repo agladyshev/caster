@@ -14,8 +14,20 @@ fetch('http://localhost:3000/get', {
     // let {title, author, summary} = podcast;
     podcasts.forEach(function(podcast) {
         let episodesHTML = podcast.feed.item.reduce((html, episode) => {
-            return html + `<h3>${episode.title[0]}</h3>`;
+            return html + 
+            `<figure>
+                <figcaption>${episode.title[0]}</figcaption>
+                <audio
+                    controls
+                    duration
+                    preload="none"
+                    src="${episode.enclosure[0]["$"].url}"
+                    type="audio/mpeg">
+                    <p>Your browser doesn't support HTML5 audio. Here is a <a href="${episode.enclosure[0]["$"].url}">link to the audio</a> instead.</p> 
+                </audio>
+            </figure>`
         }, "");
+        console.log(podcast.feed.item);
         wrapper[0].innerHTML += `
                 <section class="podcast">
                 <h2>${podcast.feed.title}</h2>
