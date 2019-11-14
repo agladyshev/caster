@@ -1,12 +1,69 @@
 html {
     box-sizing: border-box;
-  }
-  *, *:before, *:after {
+}
+
+*, *:before, *:after {
     box-sizing: inherit;
-  }
+}
+
+body {
+    background-color: #2a2a2e;
+    color: ivory;
+    font-family: 'Source Sans Pro', sans-serif;
+    margin: 1em;
+}
+
+.wrapper {
+    display: grid;
+    grid-gap: 1em;
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas:
+        "header"
+        "main";
+}
 
 figure {
     margin: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    grid-area: header;
+    padding-bottom: 0.2em;
+    border-bottom: 1px solid ivory;
+}
+
+header h1 {
+    margin: 0;
+    font-weight: 400;
+}
+
+header form {
+    background-color: #3a3a3e;
+    border-radius: 0.5em;
+    /* border: 1px solid white; */
+}
+
+header form input {
+    background-color: #3a3a3e;
+    height: 2.5em;
+    border: none;
+    color: ivory;
+    padding: 0.25em 1em;
+    border-radius: 1em;
+}
+
+header form input[type="submit"] {
+    background-color: #3a3a3e;
+    border-radius: 1em;
+}
+
+.podcasts {
+    grid-area: main;
 }
 
 .podcast {
@@ -24,7 +81,7 @@ figure {
 }
 
 .podcast picture img {
-    background: border-box khaki;
+    /* background: border-box khaki; */
     width: 100%;
     font-size: 2em;
     
@@ -38,15 +95,19 @@ figure {
 
 @media (min-width: 650px) { 
     .wrapper {
-        display: grid;
-        grid-gap: 2em;
         grid-template-columns: repeat(4, 1fr);
         grid-template-rows: auto;
+        grid-template-areas:
+        "header header header header"
+        "main main main main";
     }
 }
 
 @media (min-width: 1000px) { 
     .wrapper {
         grid-template-columns: repeat(6, 1fr);
+        grid-template-areas:
+        "header header header header header header"
+        "main main main main main main";
     }
 }

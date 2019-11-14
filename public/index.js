@@ -1,5 +1,14 @@
 let wrapper = document.getElementsByClassName('wrapper');
 
+let form = document.querySelector('form.search');
+
+console.log(form);
+
+form.addEventListener('submit', function(evt) {
+    evt.preventDefault();
+    console.log(evt.target[0].value);
+})
+
 fetch('http://localhost:3000/get', {
     headers: {'Content-Type':'application/json'},
     mode: 'cors',
