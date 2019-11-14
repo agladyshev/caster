@@ -5,9 +5,32 @@ html {
     box-sizing: inherit;
   }
 
-.podcast {
-      
+figure {
+    margin: 0;
 }
+
+.podcast {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.podcast picture {
+    flex: 1 0 auto;
+}
+
+.podcast details {
+    /* flex: 0 0 auto; */
+}
+
+.podcast picture img {
+    background: border-box khaki;
+    width: 100%;
+    font-size: 2em;
+    
+    /* font-size: 2em; */
+}
+
 
 .episode {
     
@@ -17,13 +40,13 @@ html {
     .wrapper {
         display: grid;
         grid-gap: 2em;
-        grid-template-columns: 4fr;
+        grid-template-columns: repeat(4, 1fr);
         grid-template-rows: auto;
     }
 }
 
 @media (min-width: 1000px) { 
     .wrapper {
-        grid-template-columns: 6fr;
+        grid-template-columns: repeat(6, 1fr);
     }
 }

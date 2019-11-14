@@ -27,11 +27,14 @@ fetch('http://localhost:3000/get', {
                 </audio>
             </figure>`
         }, "");
-        console.log(podcast.feed.item);
+        console.log(podcast);
         wrapper[0].innerHTML += `
-                <section class="podcast">
-                <h2>${podcast.feed.title}</h2>
-                <h6>${podcast.feed["itunes:author"]}</h6>
+            <section class="podcast">
+                <picture>
+                    <source srcset="${podcast.feed["itunes:image"][0]['$'].href}" media="(min-width: 800px)">
+                    <img src="${podcast.feed["itunes:image"][0]['$'].href}"
+                        alt="${podcast.feed.title}">
+                </picture>
                 <details class="podcast-description">
                     <summary>About</summary>
                     ${podcast.feed["itunes:summary"]}
