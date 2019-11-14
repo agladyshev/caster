@@ -4,35 +4,22 @@ const port = 3000;
 const parseString = require('xml2js').parseStringPromise;
 const request = require('request-promise-native');
 
-// request('https://changelog.com/jsparty/feed', function (error, response, body) {
-//     console.log('error', error);
-//     console.log('statusCode', response && response.statusCode);
-//     // console.log('body:', body);
-//     parseString(body, function (err, result) {
-//         console.dir(result);
-//     })
-// })
-
 let podcasts = [
     {
-        name: "JSParty",
         url: "https://changelog.com/jsparty/feed",
         feed: ""
     },
     {
-        name: "Darknet Diaries Bonus Episodes",
         url: "https://www.patreon.com/rss/darknetdiaries?auth=ZIjB2P_mT5qL2e5wX4SC7Kk0G5yxRWR_",
         feed: ""
     },
     {   
-        name: "Darknet Diaries",
         url: "https://darknetdiaries.com/feedfree.xml",
         feed: ""
     }
 ]
 
-
-var getFeed = function (req, res, next) {   
+var getFeedAll = function (req, res, next) {   
     new Promise(function (resolve, reject) {
         podcasts.forEach(function (podcast, index, array) {
             request(podcast.url)
@@ -47,34 +34,34 @@ var getFeed = function (req, res, next) {
         });
     })
     .then(function() {
-        // console.log(podcasts);
         res.podcasts = podcasts;
         next();
     })
-
 }
 
-// var requestFeed = function (podcast) {
-//     return request(podcast.url)
-//     .then(function (xml) {
-//         podcast.feed = xml;
-//     })
-//     .catch(function (error) {
-//         console.log(error);
-//     })
-// }
+var getFeed = function (url) {
+    return request(url)
+    .then(parseString)
+    .then(function (feed) {
+        return {
+            url: url,
+            feed: feed.rss.channel[0]
+        }
+    })
+    .catch(function (error) {
+        console.log(error);
+    })   
+}
 
-// var parseFeed = function (podcast) {
-//     console.log(podcast);
-//     parseString(podcast.feed, function (err, result) {
-//         podcast.feed = result;
-//         // console.log(result);
-//         // next();
-//         console.log(podcast);
-//         return podcast;
-//     })
-// }
-
+var addPodcast = function (req, res, next) {
+    console.log(getFeed);
+    getFeed(req.headers.url)
+    .then(function(podcast) {
+        res.podcast = podcast;
+        next();
+    })
+}
+    
 app.use('/', express.static('public'));
 
 app.use(function(req, res, next) {
@@ -83,11 +70,13 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get('/get', getFeed, function (req, res, next) {
-    // console.log(res.feed.rss.channel.item);
-    // let channel = res.feed.rss.channel[0];
-    // let items = res.feed.rss.channel[0].item;
+app.get('/get', getFeedAll, function (req, res, next) {
     res.send(res.podcasts);
+});
+
+app.post('/add', addPodcast, function (req, res, next) {
+    console.log(res.podcast);
+    res.send(res.podcast);
 });
 
 app.listen(port, () => console.log(`Listening`)); 
