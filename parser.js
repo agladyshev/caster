@@ -3,37 +3,27 @@ const app = express();
 const port = 3000;
 const parseString = require('xml2js').parseStringPromise;
 const request = require('request-promise-native');
+const mongo = require('./mongo');
 
-let podcasts = [
-    {
-        url: "https://changelog.com/jsparty/feed",
-        feed: ""
-    },
-    {
-        url: "https://www.patreon.com/rss/darknetdiaries?auth=ZIjB2P_mT5qL2e5wX4SC7Kk0G5yxRWR_",
-        feed: ""
-    },
-    {   
-        url: "https://darknetdiaries.com/feedfree.xml",
-        feed: ""
-    }
-]
-
-var getFeedAll = function (req, res, next) {   
-    new Promise(function (resolve, reject) {
-        podcasts.forEach(function (podcast, index, array) {
-            request(podcast.url)
-            .then(parseString)
-            .then(function (feed) {
-                podcast.feed = feed.rss.channel[0];
-                (index == 0) && resolve();
-            })
-            .catch(function (error) {
-                console.log(error);
-            })    
-        });
-    })
-    .then(function() {
+var getFeedAll = function (req, res, next) {
+    mongo.findPodcasts()
+    .then(function(podcasts) {
+        return new Promise(function (resolve, reject) {
+            // podcasts = db.collection.find();
+            podcasts.forEach(function (podcast, index, array) {
+                request(podcast.url)
+                .then(parseString)
+                .then(function (feed) {
+                    podcast.feed = feed.rss.channel[0];
+                    (index == 0) && resolve(podcasts);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })    
+            });
+        })
+    })   
+    .then(function(podcasts) {
         res.podcasts = podcasts;
         next();
     })
@@ -55,6 +45,7 @@ var getFeed = function (url) {
 
 var addPodcast = function (req, res, next) {
     console.log(getFeed);
+    mongo.insertPodcast(req.headers.url);
     getFeed(req.headers.url)
     .then(function(podcast) {
         res.podcast = podcast;

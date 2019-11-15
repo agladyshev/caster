@@ -45,6 +45,7 @@ fetch('http://localhost:3000/get', {
     console.log(error);
 })
 .then(function(podcasts) {
+    console.log(podcasts);
     podcasts.forEach((podcast) => renderPodcast(podcast))
 })
 .then(function() {
