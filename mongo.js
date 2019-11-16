@@ -47,8 +47,52 @@ const insertPodcast = function(url) {
         }) 
 }
 
+const updatePodcast = function(podcast) {
+    return connectDB(uri)
+        .then(function(client) {
+            const db = client.db(process.env.DB_NAME);
+            const col = db.collection("podcasts");
+            col.update({ _id: podcast._id }, podcast);
+            closeDB(client);
+        })
+        .catch(function (err) {
+            console.log(err);
+        }) 
+}
+
+const updatePodcastsAll = function(podcasts) {
+    let client;
+    return connectDB(uri)
+        .then(function(clientDB) {
+            client = clientDB;
+            const db = client.db(process.env.DB_NAME);
+            const col = db.collection("podcasts");
+            return Promise.all(podcasts.map(podcast => col.replaceOne({ _id: podcast._id }, podcast)));
+        })
+        .then(function() {
+            closeDB(client);
+        })
+        .catch(function (err) {
+            console.log(err);
+        }) 
+}
 
 module.exports = {
     findPodcasts,
     insertPodcast,
   };
+
+// findPodcasts()
+// .then(function (podcasts) {
+//     podcasts.forEach(podcast => {
+//         podcast.title = "test6";
+//     });
+//     return podcasts;
+// })
+// .then(function(podcasts) {
+//     return updatePodcastsAll(podcasts);
+// })
+// .then(function() {
+//     findPodcasts()
+//     .then(podcasts => console.log(podcasts))
+// })

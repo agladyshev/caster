@@ -8,26 +8,28 @@ const mongo = require('./mongo');
 var getFeedAll = function (req, res, next) {
     mongo.findPodcasts()
     .then(function(podcasts) {
-        return new Promise(function (resolve, reject) {
-            // podcasts = db.collection.find();
-            podcasts.forEach(function (podcast, index, array) {
-                request(podcast.url)
-                .then(parseString)
-                .then(function (feed) {
-                    podcast.feed = feed.rss.channel[0];
-                    (index == 0) && resolve(podcasts);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                })    
-            });
-        })
+        return Promise.all(podcasts.map((podcast) => getFeed(podcast))) 
     })   
     .then(function(podcasts) {
         res.podcasts = podcasts;
         next();
     })
 }
+
+// var updateFeedAll = function (req, res, next) {
+//     mongo.findPodcasts()
+//     .then(function(podcasts) {
+//         return Promise.all(podcasts.map((podcast) => getFeed(podcast))) 
+//     })
+//     .then(function(podcast) {
+
+//     })
+//     .then(function(podcasts) {
+//         res.podcasts = podcasts;
+//         next();
+//     })
+// }
+
 
 var getFeed = function (url) {
     return request(url)
@@ -44,10 +46,9 @@ var getFeed = function (url) {
 }
 
 var addPodcast = function (req, res, next) {
-    console.log(getFeed);
-    mongo.insertPodcast(req.headers.url);
     getFeed(req.headers.url)
     .then(function(podcast) {
+        mongo.insertPodcast(podcast);
         res.podcast = podcast;
         next();
     })
@@ -66,7 +67,6 @@ app.get('/get', getFeedAll, function (req, res, next) {
 });
 
 app.post('/add', addPodcast, function (req, res, next) {
-    console.log(res.podcast);
     res.send(res.podcast);
 });
 
