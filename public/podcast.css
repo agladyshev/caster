@@ -1,0 +1,29 @@
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+figure {
+    margin: 0;
+}
+
+.podcast {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.podcast picture {
+    flex: 1 0 auto;
+}
+
+.podcast details {
+    /* flex: 0 0 auto; */
+}
+
+.podcast picture img {
+    /* background: border-box khaki; */
+    width: 100%;
+    font-size: 2em;
+    
+    /* font-size: 2em; */
+}

@@ -53,13 +53,18 @@ class PodcastFeed extends HTMLElement {
         this.generateShadowDOM();
     }
     generateShadowDOM() {
-
+        var stylesheet = document.createElement('link');
+        stylesheet.setAttribute('href', '/feed.css');
+        stylesheet.setAttribute('rel', 'stylesheet');
+        this.shadowRoot.appendChild(stylesheet);
     }
     render(podcasts) {
         podcasts.forEach(function generatePodcastElement(data) {
-            var podcastElement = document.createElement("podcast-element");
-            podcastElement.render(data);
-            this.shadowRoot.appendChild(podcastElement);
+            if (data.feed.item) {
+                var podcastElement = document.createElement("podcast-element");
+                podcastElement.render(data);
+                this.shadowRoot.appendChild(podcastElement);
+            }
         }, this);
     }
 
@@ -71,6 +76,10 @@ class PodcastElement extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
+        var stylesheet = document.createElement('link');
+        stylesheet.setAttribute('href', '/podcast.css');
+        stylesheet.setAttribute('rel', 'stylesheet');
+        this.shadowRoot.appendChild(stylesheet);
     }
     render(podcast) {
         var section = document.createElement("section");
@@ -93,15 +102,13 @@ class PodcastElement extends HTMLElement {
         details.appendChild(summary);
         summary.innerText = "Episodes";
         details.appendChild(summary);
-        if (podcast.feed.item) {
-            this.episodes = podcast.feed.item.map(function generateEpisodeElement(e) {
-                var episodeElement = document.createElement("podcast-episode");
-                episodeElement.render(e);
-                return episodeElement;
-            });
-            this.episodes.forEach(details.appendChild, details);
-            this.shadowRoot.appendChild(section);
-        }
+        this.episodes = podcast.feed.item.map(function generateEpisodeElement(e) {
+            var episodeElement = document.createElement("podcast-episode");
+            episodeElement.render(e);
+            return episodeElement;
+        });
+        this.episodes.forEach(details.appendChild, details);
+        this.shadowRoot.appendChild(section);
     }
 }
 
@@ -111,6 +118,10 @@ class PodcastEpisode extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
+        var stylesheet = document.createElement('link');
+        stylesheet.setAttribute('href', '/episode.css');
+        stylesheet.setAttribute('rel', 'stylesheet');
+        this.shadowRoot.appendChild(stylesheet);
     }
     render(episode) {
         this.figure = document.createElement("figure");
@@ -132,7 +143,3 @@ customElements.define("podcast-episode", PodcastEpisode);
 
 let app = document.querySelector("caster-app");
 app.render();
-
-// app.fetchPodcasts();
-
-

@@ -13,7 +13,7 @@ body {
     margin: 1em;
 }
 
-.wrapper {
+.caster-app {
     display: grid;
     grid-gap: 1em;
     grid-template-columns: repeat(1, 1fr);
@@ -62,52 +62,23 @@ header form input[type="submit"] {
     border-radius: 1em;
 }
 
-.podcasts {
+main {
     grid-area: main;
 }
 
-.podcast {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-}
-
-.podcast picture {
-    flex: 1 0 auto;
-}
-
-.podcast details {
-    /* flex: 0 0 auto; */
-}
-
-.podcast picture img {
-    /* background: border-box khaki; */
-    width: 100%;
-    font-size: 2em;
-    
-    /* font-size: 2em; */
-}
-
-
-.episode {
-    
+podcast-feed {
+    display: grid;
+    gap: 1em;
 }
 
 @media (min-width: 650px) { 
-    .wrapper {
+    podcast-feed {
         grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: auto;
-        grid-template-areas:
-        "header header header header"
-        "main main main main";
     }
 }
 
 @media (min-width: 1000px) { 
-    .wrapper {
+    podcast-feed {
         grid-template-columns: repeat(6, 1fr);
-        grid-template-areas:
-        "header header header header header header"
-        "main main main main main main";
     }
 }
