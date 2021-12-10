@@ -31,13 +31,20 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
     grid-area: header;
     padding-bottom: 0.2em;
     border-bottom: 1px solid ivory;
 }
 
+header .icon {
+    width: 2em;
+    height: 1em;
+}
+
 header h1 {
+    display: flex;
+    align-items: center;
     margin: 0;
     font-weight: 400;
 }
