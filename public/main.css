@@ -1,8 +1,32 @@
+@keyframes wave {
+    0% {
+        stroke-width: 2;
+    }
+
+    25% {
+        stroke-width: 3;
+    }
+
+    50% {
+        stroke-width: 4;
+    }
+
+    75% {
+        stroke-width: 3;
+    }
+
+    100% {
+        stroke-width: 2;
+    }
+}
+
 html {
     box-sizing: border-box;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
     box-sizing: inherit;
 }
 
@@ -49,6 +73,11 @@ header h1 {
     font-weight: 400;
 }
 
+header h1 svg line {
+    animation: 5s infinite alternate wave;
+}
+
+
 header form {
     background-color: #3a3a3e;
     border-radius: 0.5em;
@@ -78,13 +107,13 @@ podcast-feed {
     gap: 1em;
 }
 
-@media (min-width: 650px) { 
+@media (min-width: 650px) {
     podcast-feed {
         grid-template-columns: repeat(4, 1fr);
     }
 }
 
-@media (min-width: 1000px) { 
+@media (min-width: 1000px) {
     podcast-feed {
         grid-template-columns: repeat(6, 1fr);
     }
