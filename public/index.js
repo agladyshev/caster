@@ -4,16 +4,51 @@ class CasterApp extends HTMLElement {
         this.feed = this.querySelector("podcast-feed");
         this.search = this.querySelector("form.search");
         this.search.addEventListener('submit', this.addPodcast);
+        this.logo = this.querySelector("svg#wave");
+        this.animateLogo();
     }
     render() {
         this.fetchPodcasts().then(this.feed.render.bind(this.feed), this.handleError);
     }
+    animateLogo() {
+        var transitionTime = 2000;
+        var frames = 100;
+        var lines = this.logo.querySelectorAll("line");
+        var linesAmp = [];
+        window.setInterval(setStrokeAmplitude, transitionTime);
+        window.setInterval(setStrokeHeight, transitionTime / frames);
+
+        function setStrokeAmplitude() {
+            lines.forEach(function generateRandomAmplitude(line, index) {
+                linesAmp[index] = {
+                    value: Math.floor(Math.random() * (150 - 30) + 30)
+                }
+                linesAmp[index].step = (line.getAttribute("y2") - linesAmp[index].value) / frames;
+            })
+        }
+
+        function setStrokeHeight() {
+            if (linesAmp.length == 0)
+                return;
+            lines.forEach(function setYAttributes(line, index) {
+                var y2 = Number(line.getAttribute("y2"));
+                if (y2 - 150 > linesAmp[index].value)
+                    line.setAttribute("y2", y2 - linesAmp[index].step)
+                else
+                    line.setAttribute("y2", y2 + linesAmp[index].step)
+                line.setAttribute("y1", 300 - y2);
+
+            })
+        }
+    }
     fetchPodcasts() {
         return fetch('http://localhost:3000/get', {
-            headers: { 'Content-Type': 'application/json' },
-            mode: 'cors',
-            method: 'GET',
-        })
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors',
+                method: 'GET',
+            })
             .then(function (res) {
                 return res.json();
             }, function (error) {
@@ -23,10 +58,13 @@ class CasterApp extends HTMLElement {
     addPodcast(event) {
         event.preventDefault();
         fetch('http://localhost:3000/add', {
-            headers: { 'Content-Type': 'application/json', 'url': event.target[0].value },
-            mode: 'cors',
-            method: 'POST',
-        })
+                headers: {
+                    'Content-Type': 'application/json',
+                    'url': event.target[0].value
+                },
+                mode: 'cors',
+                method: 'POST',
+            })
             .then(function (res) {
                 return res.json();
             }, function (error) {
@@ -49,7 +87,9 @@ customElements.define("caster-app", CasterApp);
 class PodcastFeed extends HTMLElement {
     constructor() {
         super();
-        this.attachShadow({ mode: "open" });
+        this.attachShadow({
+            mode: "open"
+        });
         this.generateShadowDOM();
     }
     generateShadowDOM() {
@@ -75,7 +115,9 @@ customElements.define("podcast-feed", PodcastFeed);
 class PodcastElement extends HTMLElement {
     constructor() {
         super();
-        this.attachShadow({ mode: "open" });
+        this.attachShadow({
+            mode: "open"
+        });
         var stylesheet = document.createElement('link');
         stylesheet.setAttribute('href', '/podcast.css');
         stylesheet.setAttribute('rel', 'stylesheet');
@@ -117,7 +159,9 @@ customElements.define("podcast-element", PodcastElement);
 class PodcastEpisode extends HTMLElement {
     constructor() {
         super();
-        this.attachShadow({ mode: "open" });
+        this.attachShadow({
+            mode: "open"
+        });
         var stylesheet = document.createElement('link');
         stylesheet.setAttribute('href', '/episode.css');
         stylesheet.setAttribute('rel', 'stylesheet');
