@@ -24,7 +24,7 @@ const findPodcasts = function() {
             const db = client.db(process.env.DB_NAME);
             const col = db.collection("podcasts");
             return col.find({}).toArray()
-        .then(function(podcasts) {
+        .then(function (podcasts) {
             closeDB(client);
             return podcasts;
         })
@@ -39,9 +39,9 @@ const insertPodcast = function(url) {
         .then(function(client) {
             const db = client.db(process.env.DB_NAME);
             const col = db.collection("podcasts");
-            col.insertOne({ url: url })
-            closeDB(client);
+            return col.insertOne({ url: url });
         })
+        //TODO close connection db
         .catch(function (err) {
             console.log(err);
         }) 

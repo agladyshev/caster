@@ -48,8 +48,9 @@ var getFeed = function (url) {
 
 var addPodcast = function (req, res, next) {
     getFeed(req.headers.url)
-        .then(function (podcast) {
-            mongo.insertPodcast(podcast);
+        .then(async function (podcast) {
+            let result = await mongo.insertPodcast(podcast.url);
+            console.log(result);
             res.podcast = podcast;
             next();
         })
