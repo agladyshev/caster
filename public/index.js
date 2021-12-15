@@ -3,12 +3,15 @@ class CasterApp extends HTMLElement {
         super();
         this.feed = this.querySelector("podcast-feed");
         this.search = this.querySelector("form.search");
-        this.search.addEventListener('submit', this.addPodcast);
+        this.search.addEventListener('submit', this.addPodcast.bind(this));
         this.logo = this.querySelector("svg#wave");
         this.animateLogo();
     }
     render() {
         this.fetchPodcasts().then(this.feed.render.bind(this.feed), this.handleError);
+    }
+    renderPodcast(podcast) {
+        this.feed.generatePodcastElement(podcast);
     }
     animateLogo() {
         var transitionTime = 2000;
@@ -71,9 +74,8 @@ class CasterApp extends HTMLElement {
                 console.log(error);
             })
             .then(function (podcast) {
-                console.log(this);
-                // renderPodcast(podcast);
-            })
+                this.renderPodcast(podcast);
+            }.bind(this))
 
     }
     handleError(e) {
@@ -99,15 +101,15 @@ class PodcastFeed extends HTMLElement {
         this.shadowRoot.appendChild(stylesheet);
     }
     render(podcasts) {
-        podcasts.forEach(function generatePodcastElement(data) {
-            if (data.feed.item) {
-                var podcastElement = document.createElement("podcast-element");
-                podcastElement.render(data);
-                this.shadowRoot.appendChild(podcastElement);
-            }
-        }, this);
+        podcasts.forEach(this.generatePodcastElement.bind(this));
     }
-
+    generatePodcastElement(data) {
+        if (data.feed.item) {
+            var podcastElement = document.createElement("podcast-element");
+            podcastElement.render(data);
+            this.shadowRoot.appendChild(podcastElement);
+        }
+    }
 }
 
 customElements.define("podcast-feed", PodcastFeed);

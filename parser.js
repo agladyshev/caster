@@ -50,7 +50,6 @@ var addPodcast = function (req, res, next) {
     getFeed(req.headers.url)
         .then(async function (podcast) {
             let result = await mongo.insertPodcast(podcast.url);
-            console.log(result);
             res.podcast = podcast;
             next();
         })

@@ -1,4 +1,4 @@
-@keyframes wave {
+/* @keyframes wave {
     0% {
         stroke-width: 2;
     }
@@ -18,7 +18,7 @@
     100% {
         stroke-width: 2;
     }
-}
+} */
 
 html {
     box-sizing: border-box;
@@ -73,9 +73,9 @@ header h1 {
     font-weight: 400;
 }
 
-header h1 svg line {
-    animation: 5s infinite alternate wave;
-}
+/* header h1 svg line { */
+/* animation: 5s ease-in-out infinite alternate wave; */
+/* } */
 
 
 header form {
